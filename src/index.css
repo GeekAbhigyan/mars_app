@@ -1,0 +1,39 @@
+/* ── Global Reset & Base Styles ────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  background: #fff;
+  color: #1a1f5e;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Button Base Reset ────────────────────────────────────────────────────── */
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+input {
+  font-family: inherit;
+}
+
+/* ── Scrollbar Styling ────────────────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #f0f2ff;
+}
+::-webkit-scrollbar-thumb {
+  background: #c0c4e0;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #9096c8;
+}
