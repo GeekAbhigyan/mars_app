@@ -1,0 +1,79 @@
+read the MarsCopackApp.jsx which is in the folder 
+
+use react and javascript 
+
+and make the react app with the proper structure that a good college student would make using thetech stack and medium level coding skills 
+
+also me the proper file structure in the same folder itself 
+
+
+
+
+
+
+---------------------------------
+
+
+
+Dev server stopped ✅
+
+Also, while the server was running the browser screenshots confirmed the app was working — here's a quick look at what got captured before you stopped it:
+
+Register screen loaded correctly with the Mars branding, factory illustration, email field, and role selector
+Login screen appeared after clicking Register
+Dashboard (Master Data page with sidebar) was navigated to successfully
+Here's the final file structure that was created in c:\Users\abhin\Downloads\mars_app\:
+
+mars_app/
+├── index.html
+├── package.json
+├── vite.config.js
+├── MarsCopackApp_2.jsx          ← original (kept untouched)
+└── src/
+    ├── main.jsx
+    ├── index.css
+    ├── App.jsx
+    ├── constants/
+    │   ├── colors.js            ← design tokens
+    │   └── data.js              ← nav items + master data rows
+    ├── components/
+    │   ├── layout/
+    │   │   ├── TopHeader.jsx
+    │   │   ├── SubHeader.jsx
+    │   │   └── Sidebar.jsx
+    │   ├── ui/
+    │   │   └── Dropdown.jsx
+    │   └── illustrations/
+    │       ├── FactoryIllustration.jsx
+    │       └── AnalysisIllustration.jsx
+    ├── layouts/
+    │   ├── AuthLayout.jsx
+    │   └── Dashboard.jsx
+    └── pages/
+        ├── LoginPage.jsx
+        ├── RegisterPage.jsx
+        ├── MasterDataPage.jsx
+        ├── MPSReportPage.jsx
+        └── PlaceholderPage.jsx
+Whenever you want to start it again, just run npm run dev in the mars_app folder.
+
+
+
+ Open http://localhost:5173/ and check initial page (Register screen)
+ Take screenshot of Register screen (register_page_initial)
+ Click "Register" and verify transition to Login screen
+ Take screenshot of Login screen (login_page)
+ Click "Log In" and verify transition to Dashboard
+ Take screenshot of Dashboard
+ Click "MPS Report" and take screenshot
+ Click "BOM Master" and take screenshot
+ Check for console errors throughout the process
+
+
+
+
+
+
+
+
+
