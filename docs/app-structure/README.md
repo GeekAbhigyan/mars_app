@@ -9,7 +9,14 @@ This project is a frontend application built with:
 - `JavaScript + JSX`
 - Inline style objects for UI styling
 
-There is currently no backend, database, router, or API integration in this repo. Most screens use local React state and static sample data.
+A lightweight Django backend now exists alongside the React frontend; it uses a SQLite database (`db.sqlite3`) and exposes two read‑only REST endpoints. During development the frontend fetches data from these APIs instead of relying on hard‑coded constants.
+
+The available endpoints are:
+
+- `/api/masterdata/` – returns the master data rows as JSON
+- `/api/mpsreport/` – returns the report rows; each object includes a `values` JSON field
+
+Both endpoints automatically seed the database with sample data on first access, making the setup self‑contained for a college‑level prototype.
 
 ## High-Level App Flow
 
@@ -19,8 +26,12 @@ Main flow:
 
 1. `src/main.jsx`
 2. `src/App.jsx`
-3. Auth screens or dashboard layout
-4. Active page content
+3. Registration screen (first screen on refresh)
+4. Login screen
+5. Dashboard (`MPS Report` default)
+6. Active page content
+
+The current flow intentionally resets on refresh to registration, simulating a fresh auth entry without persistent session storage.
 
 ## Folder Structure
 
@@ -51,8 +62,10 @@ Top-level app controller.
 Responsibilities:
 
 - manages which screen is visible
-- switches between register, login, and dashboard
+- handles register → login → dashboard flow
+- validates user credentials (in-memory for prototype)
 - passes logout behavior back into the dashboard
+- uses session design where refresh returns to register
 
 ### `src/layouts/`
 
@@ -175,7 +188,16 @@ If you want to understand the app quickly, read in this order:
 1. `src/main.jsx`
 2. `src/App.jsx`
 3. `src/layouts/Dashboard.jsx`
-4. `src/pages/MasterDataPage.jsx`
-5. `src/pages/MPSReportPage.jsx`
-6. `src/components/layout/Sidebar.jsx`
-7. `src/constants/data.js`
+4. `src/pages/RegisterPage.jsx`
+5. `src/pages/LoginPage.jsx`
+6. `src/pages/MasterDataPage.jsx`
+7. `src/pages/MPSReportPage.jsx`
+8. `src/components/layout/Sidebar.jsx`
+9. `src/constants/data.js`
+
+
+---
+
+For details on the backend API and how the frontend calls it, see `docs/api-integration/README.md`.
+
+For major concepts used in building this app, see `docs/app-structure/major-concepts.md`.

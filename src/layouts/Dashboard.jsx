@@ -14,7 +14,7 @@ import PlaceholderPage from '../pages/PlaceholderPage';
  * @param {Function} onLogout - Called to return the user to the auth screens
  */
 const Dashboard = ({ onLogout }) => {
-  const [activePage, setActivePage] = useState('Master Data');
+  const [activePage, setActivePage] = useState('MPS Report');
 
   const renderPage = () => {
     switch (activePage) {

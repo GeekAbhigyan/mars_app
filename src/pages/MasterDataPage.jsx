@@ -22,6 +22,24 @@ const MasterDataPage = () => {
   const [editSnapshot, setEditSnapshot] = useState(null);
   const detailsRef = useRef(null);
 
+  // load rows from Django API if available
+  useEffect(() => {
+    const base = import.meta.env.VITE_API_BASE || 'http://localhost:8000/api';
+    if (!import.meta.env.VITE_API_BASE) {
+      console.warn('VITE_API_BASE not defined; defaulting to', base);
+    }
+    fetch(`${base}/masterdata/`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (Array.isArray(data) && data.length) {
+          setRows(data);
+        }
+      })
+      .catch((err) => {
+        console.error('Error fetching master data from API', err);
+      });
+  }, []);
+
   const [codeTypeFilter, setCodeTypeFilter] = useState('All');
   const [copackFilter, setCopackFilter] = useState('All');
   const [donorFilter, setDonorFilter] = useState('All');
@@ -149,7 +167,7 @@ const MasterDataPage = () => {
   });
 
   return (
-    <div style={{ padding: '20px 24px', background: colors.contentBg, minHeight: '100%' }}>
+    <div style={{ padding: '20px 24px', background: colors.contentBg, height: '100%', display: 'flex', flexDirection: 'column' }}>
       <h2 style={{ margin: '0 0 16px', fontSize: 18, fontWeight: 700, color: colors.textDark }}>
         Master Data
       </h2>
@@ -239,15 +257,17 @@ const MasterDataPage = () => {
           borderRadius: 8,
           border: '1px solid #e8e8e8',
           overflow: 'hidden',
-          marginBottom: 16,
+          flex: 1,
+          display: 'flex',
+          flexDirection: 'column',
         }}
       >
-        <div style={{ overflowX: 'auto' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
+        <div style={{ overflowX: 'auto', flex: 1 }}>
+          <table style={{ width: '100%', minWidth: 1300, borderCollapse: 'collapse', fontSize: 13 }}>
             <thead>
               <tr style={{ background: colors.tableBg }}>
                 <th style={{ width: 56, padding: '11px 12px' }} />
-                {['Copack Code', 'Copack Description', 'Case per Pallet', 'Batch Size 1', 'Batch Size 2', 'Rule', 'Code Type', 'Output Rate'].map((header) => (
+                {['Copack Code', 'Copack Description', 'Case per Pallet', 'Batch Size 1', 'Batch Size 2', 'Rule', 'Code Type', 'Output Rate', 'Safety Stock', 'Line', 'Lead Time (Days)', 'Production Max', 'Donor Code', 'Usage Status'].map((header) => (
                   <th
                     key={header}
                     style={{
@@ -268,7 +288,7 @@ const MasterDataPage = () => {
             <tbody>
               {filteredRows.length === 0 ? (
                 <tr>
-                  <td colSpan={9} style={{ padding: '18px 12px', textAlign: 'center', color: '#777' }}>
+                  <td colSpan={11} style={{ padding: '18px 12px', textAlign: 'center', color: '#777' }}>
                     No rows match the selected filters.
                   </td>
                 </tr>
@@ -303,6 +323,12 @@ const MasterDataPage = () => {
                       <td style={{ padding: '10px 12px', textAlign: 'center', color: '#333' }}>{row.rule}</td>
                       <td style={{ padding: '10px 12px', color: '#333' }}>{row.type}</td>
                       <td style={{ padding: '10px 12px', textAlign: 'center', color: '#333' }}>{row.rate}</td>
+                      <td style={{ padding: '10px 12px', textAlign: 'center', color: '#333' }}>{row.safetyStock ?? 'N/A'}</td>
+                      <td style={{ padding: '10px 12px', textAlign: 'center', color: '#333' }}>{row.line ?? 'N/A'}</td>
+                      <td style={{ padding: '10px 12px', textAlign: 'center', color: '#333' }}>{row.leadTimeDays ?? 'N/A'}</td>
+                      <td style={{ padding: '10px 12px', textAlign: 'center', color: '#333' }}>{row.productionMax ?? 'N/A'}</td>
+                      <td style={{ padding: '10px 12px', color: '#333' }}>{row.donorCode ?? 'N/A'}</td>
+                      <td style={{ padding: '10px 12px', color: '#333' }}>{row.usageStatus ?? 'N/A'}</td>
                     </tr>
                   );
                 })
@@ -370,6 +396,8 @@ const MasterDataPage = () => {
           border: `1.5px solid ${isEditing ? colors.sidebarActive : '#e8e8e8'}`,
           padding: '20px 24px',
           transition: 'border-color 0.2s',
+          flex: 1,
+          overflowY: 'auto',
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', marginBottom: 16 }}>

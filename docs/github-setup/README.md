@@ -11,6 +11,7 @@ Before you start, make sure your machine has:
 - `git`
 - `Node.js` 18 or later
 - `npm` (comes with Node.js)
+- `Python` 3.10+ with `pip` (for the Django backend)
 
 Check your versions:
 
@@ -18,6 +19,8 @@ Check your versions:
 git --version
 node --version
 npm --version
+python --version
+pip --version
 ```
 
 ## 1. Clone the Repository
@@ -46,19 +49,26 @@ This project uses:
 
 ## 3. Start the Development Server
 
-Run:
+Run the frontend and backend in separate terminals.
+
+Frontend:
 
 ```bash
 npm run dev
 ```
 
-Vite will print a local URL in the terminal, usually:
+Backend:
 
 ```bash
-http://localhost:5173
+# make sure requirements are installed and migrations have been applied
+pip install -r requirements.txt
+python manage.py migrate
+python manage.py runserver
 ```
 
-Open that URL in your browser.
+Vite will print a local URL in the terminal (typically `http://localhost:5173`).  The Django server listens on `http://localhost:8000` and exposes the API endpoints.
+
+Open the frontend URL in your browser to see the app; it will fetch data from the backend automatically.
 
 ## 4. Build for Production
 
@@ -116,9 +126,10 @@ Then open a Pull Request on GitHub.
 Available scripts from `package.json`:
 
 ```bash
-npm run dev
+npm run dev       # start Vite frontend
 npm run build
 npm run preview
+npm run backend    # start Django backend (runs manage.py runserver)
 ```
 
 ## Troubleshooting
@@ -153,3 +164,4 @@ Read these project docs next:
 
 - `docs/app-structure/README.md`
 - `docs/beginner-guide/README.md`
+- `docs/api-integration/README.md`  (explains backend calls)

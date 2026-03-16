@@ -3,9 +3,9 @@ import colors from '../../constants/colors';
 const TopHeader = ({ onLogout }) => (
   <header
     style={{
-      display: 'flex',
+      display: 'grid',
+      gridTemplateColumns: '1fr auto 1fr',
       alignItems: 'center',
-      justifyContent: 'space-between',
       padding: '0 24px',
       height: 56,
       borderBottom: '1px solid #e8e8e8',
@@ -13,20 +13,23 @@ const TopHeader = ({ onLogout }) => (
       position: 'sticky',
       top: 0,
       zIndex: 100,
+      gap: 8,
     }}
   >
-    <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.1 }}>
-      <span style={{ fontWeight: 800, fontSize: 20, color: colors.marsBlueDark, letterSpacing: 1 }}>
-        MARS
-      </span>
-      <span style={{ fontWeight: 500, fontSize: 13, color: colors.marsOrange }}>Snacking</span>
+    <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+      <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.1 }}>
+        <span style={{ fontWeight: 800, fontSize: 20, color: colors.marsBlueDark, letterSpacing: 1 }}>
+          MARS
+        </span>
+        <span style={{ fontWeight: 500, fontSize: 13, color: colors.marsOrange }}>Snacking</span>
+      </div>
     </div>
 
-    <div style={{ fontWeight: 700, fontSize: 17, color: colors.marsBlueDark }}>
-      Operations Planning
+    <div style={{ textAlign: 'center' }}>
+      <div style={{ fontWeight: 700, fontSize: 17, color: colors.marsBlueDark }}>Operations Planning</div>
     </div>
 
-    <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+    <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: 12 }}>
       <span style={{ fontSize: 12, color: '#555' }}>
         <strong>Last Refresh:</strong> 11/17/2025
       </span>

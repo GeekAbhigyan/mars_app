@@ -179,3 +179,35 @@ If you want to understand the app quickly, read in this order:
 5. `src/pages/MPSReportPage.jsx`
 6. `src/components/layout/Sidebar.jsx`
 7. `src/constants/data.js`
+
+---
+
+## Backend (Django) Setup
+
+A minimal Django backend has been added under the project root. It uses SQLite (`db.sqlite3`) as a dummy database with two tables:
+
+- `api_masterdatarow` – stores copack master data
+- `api_mpsreportrow` – stores MPS report rows (values are stored as JSON)
+
+The database file is created when you run migrations and seeded automatically on first API request.
+
+To start the backend server:
+
+```powershell
+cd mars_app
+# make sure you have Python 3 installed
+python -m venv venv          # optional
+venv\Scripts\activate       # if using the virtualenv
+pip install -r requirements.txt  # you can generate one from pip freeze
+python manage.py migrate
+python manage.py runserver
+```
+
+The API endpoints are exposed at:
+
+- `http://localhost:8000/api/masterdata/`
+- `http://localhost:8000/api/mpsreport/`
+
+The frontend pages (`MasterDataPage` / `MPSReportPage`) now fetch data from these endpoints during mount, replacing the previous static constants.
+
+This simple setup is meant to resemble what a college project might include – a small backend serving a few read‑only endpoints with a local SQLite database. Feel free to extend it later.

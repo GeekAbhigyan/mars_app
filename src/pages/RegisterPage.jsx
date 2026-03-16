@@ -6,7 +6,10 @@ const ROLES = ['Super User', 'User'];
 
 const RegisterPage = ({ onRegister, onGoLogin }) => {
   const [email, setEmail] = useState('aakaash.pattanayak@effem.com');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [role, setRole] = useState('Super User');
+  const [error, setError] = useState('');
 
   const cardStyle = {
     background: '#fff',
@@ -31,7 +34,7 @@ const RegisterPage = ({ onRegister, onGoLogin }) => {
           Register your account
         </h2>
 
-        <div style={{ marginBottom: 16 }}>
+        <div style={{ marginBottom: 12 }}>
           <label
             htmlFor="register-email"
             style={{ display: 'block', fontSize: 13, color: '#555', marginBottom: 6, fontWeight: 500 }}
@@ -56,20 +59,63 @@ const RegisterPage = ({ onRegister, onGoLogin }) => {
           />
         </div>
 
-        <div style={{ marginBottom: 24 }}>
+        <div style={{ marginBottom: 12 }}>
+          <label
+            htmlFor="register-password"
+            style={{ display: 'block', fontSize: 13, color: '#555', marginBottom: 6, fontWeight: 500 }}
+          >
+            Password
+          </label>
+          <input
+            id="register-password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            style={{
+              width: '100%',
+              padding: '10px 12px',
+              border: '1px solid #ddd',
+              borderRadius: 7,
+              fontSize: 13,
+              color: '#333',
+              boxSizing: 'border-box',
+              outline: 'none',
+            }}
+          />
+        </div>
+
+        <div style={{ marginBottom: 12 }}>
+          <label
+            htmlFor="register-confirm-password"
+            style={{ display: 'block', fontSize: 13, color: '#555', marginBottom: 6, fontWeight: 500 }}
+          >
+            Confirm Password
+          </label>
+          <input
+            id="register-confirm-password"
+            type="password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            style={{
+              width: '100%',
+              padding: '10px 12px',
+              border: '1px solid #ddd',
+              borderRadius: 7,
+              fontSize: 13,
+              color: '#333',
+              boxSizing: 'border-box',
+              outline: 'none',
+            }}
+          />
+        </div>
+
+        <div style={{ marginBottom: 14 }}>
           <div style={{ fontSize: 13, color: '#555', marginBottom: 10, fontWeight: 500 }}>Role</div>
           <div style={{ display: 'flex', gap: 20 }} role="radiogroup" aria-label="Role">
             {ROLES.map((item) => (
               <label
                 key={item}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 7,
-                  cursor: 'pointer',
-                  fontSize: 13,
-                  color: '#333',
-                }}
+                style={{ display: 'flex', alignItems: 'center', gap: 7, cursor: 'pointer', fontSize: 13, color: '#333' }}
               >
                 <input
                   type="radio"
@@ -84,9 +130,23 @@ const RegisterPage = ({ onRegister, onGoLogin }) => {
           </div>
         </div>
 
+        {error && (
+          <div style={{ color: '#b00020', marginBottom: 12, fontSize: 12, textAlign: 'center' }}>{error}</div>
+        )}
         <button
           type="button"
-          onClick={onRegister}
+          onClick={() => {
+            if (!email || !password || !confirmPassword) {
+              setError('Please complete all fields.');
+              return;
+            }
+            if (password !== confirmPassword) {
+              setError('Passwords do not match.');
+              return;
+            }
+            setError('');
+            onRegister({ email, password, role });
+          }}
           style={{
             width: '100%',
             padding: '13px',

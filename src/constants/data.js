@@ -1,16 +1,6 @@
 export const navItems = [
   { label: 'Master Data', icon: 'MD' },
-  { label: 'Master Data (Refined)', icon: 'MR' },
   { label: 'MPS Report', icon: 'MP' },
-  { label: 'BOM Master', icon: 'BM' },
-  { label: 'BOM Master (Refined)', icon: 'BR' },
-  { label: 'Donor Check', icon: 'DC' },
-  { label: 'Capacity Report', icon: 'CR' },
-  { label: 'MRP Report', icon: 'MRP' },
-  { label: 'Copack Order Sheet', icon: 'CO' },
-  { label: 'PO Sheet', icon: 'PO' },
-  { label: 'Daily Pipeline Position Report', icon: 'DP' },
-  { label: 'Stock Coverage Report', icon: 'SC' },
 ];
 
 export const masterDataRows = [
@@ -25,6 +15,10 @@ export const masterDataRows = [
     rate: 574,
     donorCode: 'D001',
     usageStatus: 'Active',
+    safetyStock: '3 wks',
+    line: 'Line A',
+    leadTimeDays: 15,
+    productionMax: 1200,
   },
   {
     code: '10061484',
@@ -37,6 +31,10 @@ export const masterDataRows = [
     rate: 215,
     donorCode: 'D002',
     usageStatus: 'Active',
+    safetyStock: '2 wks',
+    line: 'Line B',
+    leadTimeDays: 10,
+    productionMax: 950,
   },
   {
     code: '10086648',
@@ -49,6 +47,10 @@ export const masterDataRows = [
     rate: 496,
     donorCode: 'D003',
     usageStatus: 'Inactive',
+    safetyStock: '4 wks',
+    line: 'Line A',
+    leadTimeDays: 18,
+    productionMax: 1620,
   },
   {
     code: '10086649',
@@ -61,6 +63,10 @@ export const masterDataRows = [
     rate: 374,
     donorCode: 'D001',
     usageStatus: 'Active',
+    safetyStock: '2 wks',
+    line: 'Line C',
+    leadTimeDays: 12,
+    productionMax: 1040,
   },
   {
     code: '10086651',
@@ -73,6 +79,10 @@ export const masterDataRows = [
     rate: 319,
     donorCode: 'D002',
     usageStatus: 'Inactive',
+    safetyStock: '3 wks',
+    line: 'Line B',
+    leadTimeDays: 14,
+    productionMax: 1100,
   },
   {
     code: '10086652',
@@ -85,5 +95,9 @@ export const masterDataRows = [
     rate: 268,
     donorCode: 'D003',
     usageStatus: 'Active',
+    safetyStock: '2 wks',
+    line: 'Line C',
+    leadTimeDays: 16,
+    productionMax: 1250,
   },
 ];

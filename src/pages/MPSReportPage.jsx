@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import colors from '../constants/colors';
 import Dropdown from '../components/ui/Dropdown';
 
@@ -55,6 +55,45 @@ const REPORT_ROWS = [
       balance: ['104', '265', '203', '141', '303', '241', '372', '279', '156', '931'],
     },
   },
+  {
+    code: '10300111',
+    description: 'MARS BAR\n(20*50G)',
+    casePerPallet: '200\n(40.00)\nSafety Stock: 3',
+    brand: 'Mars',
+    copackCode: '10300111',
+    values: {
+      onHand: ['89', '', '', '', '', '', '', '', '', ''],
+      demand: ['20', '20', '20', '20', '20', '20', '20', '20', '20', '20'],
+      production: ['0', '0', '100', '0', '0', '140', '0', '0', '0', '0'],
+      balance: ['69', '49', '129', '109', '89', '229', '209', '189', '169', '149'],
+    },
+  },
+  {
+    code: '10300112',
+    description: 'SNICKERS NUT\n(15*50G)',
+    casePerPallet: '210\n(42.00)\nSafety Stock: 2',
+    brand: 'Snickers',
+    copackCode: '10300112',
+    values: {
+      onHand: ['120', '', '', '', '', '', '', '', '', ''],
+      demand: ['40', '45', '50', '40', '45', '50', '45', '40', '45', '50'],
+      production: ['0', '0', '0', '100', '0', '0', '90', '0', '0', '110'],
+      balance: ['80', '35', '35', '95', '50', '0', '45', '5', '50', '110'],
+    },
+  },
+  {
+    code: '10300233',
+    description: 'M&MS POUCH\n(30*100G)',
+    casePerPallet: '240\n(48.00)\nSafety Stock: 4',
+    brand: 'M&M',
+    copackCode: '10300233',
+    values: {
+      onHand: ['250', '', '', '', '', '', '', '', '', ''],
+      demand: ['25', '25', '25', '25', '25', '25', '25', '25', '25', '25'],
+      production: ['0', '0', '0', '0', '0', '0', '200', '0', '0', '0'],
+      balance: ['225', '200', '175', '150', '125', '100', '275', '250', '225', '200'],
+    },
+  },
 ];
 
 const PARAMETER_ROWS = [
@@ -73,12 +112,34 @@ const MPSReportPage = () => {
   const [copackCode, setCopackCode] = useState('All');
   const [searchValue, setSearchValue] = useState('');
 
-  const brandOptions = useMemo(() => ['All', ...new Set(REPORT_ROWS.map((item) => item.brand))], []);
-  const copackOptions = useMemo(() => ['All', ...new Set(REPORT_ROWS.map((item) => item.copackCode))], []);
+  const [isEditingProduction, setIsEditingProduction] = useState(false);
+
+  // rows from API (fall back to REPORT_ROWS constant if needed)
+  const [reportRows, setReportRows] = useState(REPORT_ROWS);
+
+  useEffect(() => {
+    const base = import.meta.env.VITE_API_BASE || 'http://localhost:8000/api';
+    if (!import.meta.env.VITE_API_BASE) {
+      console.warn('VITE_API_BASE not defined; defaulting to', base);
+    }
+    fetch(`${base}/mpsreport/`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (Array.isArray(data) && data.length) {
+          setReportRows(data);
+        }
+      })
+      .catch((err) => {
+        console.error('Error loading MPS report rows', err);
+      });
+  }, []);
+
+  const brandOptions = useMemo(() => ['All', ...new Set(reportRows.map((item) => item.brand))], [reportRows]);
+  const copackOptions = useMemo(() => ['All', ...new Set(reportRows.map((item) => item.copackCode))], [reportRows]);
 
   const visibleRows = useMemo(
     () =>
-      REPORT_ROWS.filter((row) => {
+      reportRows.filter((row) => {
         const matchesBrand = brand === 'All' || row.brand === brand;
         const matchesCopack = copackCode === 'All' || row.copackCode === copackCode;
         const searchTarget = `${row.code} ${row.description}`.toLowerCase();
@@ -86,7 +147,7 @@ const MPSReportPage = () => {
 
         return matchesBrand && matchesCopack && matchesSearch;
       }),
-    [brand, copackCode, searchValue],
+    [brand, copackCode, searchValue, reportRows],
   );
 
   const handleReset = () => {
@@ -95,6 +156,25 @@ const MPSReportPage = () => {
     setBrand('All');
     setCopackCode('All');
     setSearchValue('');
+  };
+
+  const handleProductionChange = (rowCode, weekIndex, value) => {
+    setReportRows((prevRows) =>
+      prevRows.map((row) => {
+        if (row.code !== rowCode) return row;
+        const newProduction = [...row.values.production];
+        newProduction[weekIndex] = value;
+        return { ...row, values: { ...row.values, production: newProduction } };
+      }),
+    );
+  };
+
+  const handleToggleEdit = () => {
+    setIsEditingProduction((old) => !old);
+  };
+
+  const handleSaveProduction = () => {
+    setIsEditingProduction(false);
   };
 
   const handleDownload = () => {
@@ -244,20 +324,40 @@ const MPSReportPage = () => {
             </button>
             <button
               type="button"
+              onClick={handleToggleEdit}
               style={{
                 height: 28,
                 padding: '0 12px',
                 borderRadius: 3,
                 border: 'none',
-                background: '#ff8a00',
+                background: isEditingProduction ? '#4a4f59' : '#ff8a00',
                 color: '#fff',
                 fontSize: 12,
                 fontWeight: 700,
                 cursor: 'pointer',
               }}
             >
-              Edit
+              {isEditingProduction ? 'Cancel Edit' : 'Edit'}
             </button>
+            {isEditingProduction && (
+              <button
+                type="button"
+                onClick={handleSaveProduction}
+                style={{
+                  height: 28,
+                  padding: '0 12px',
+                  borderRadius: 3,
+                  border: 'none',
+                  background: '#0f7a37',
+                  color: '#fff',
+                  fontSize: 12,
+                  fontWeight: 700,
+                  cursor: 'pointer',
+                }}
+              >
+                Save Production
+              </button>
+            )}
             <button
               type="button"
               onClick={handleDownload}
@@ -279,7 +379,7 @@ const MPSReportPage = () => {
         </div>
 
         <div style={{ padding: '0 12px 8px' }}>
-          <div style={{ overflowX: 'auto', border: '1px solid #d2d2d2', borderBottom: 'none' }}>
+          <div style={{ overflowX: 'auto', border: '1px solid #d2d2d2', borderBottom: 'none', maxHeight: 380, overflowY: 'auto' }}>
             <table style={{ width: '100%', minWidth: 1180, borderCollapse: 'collapse', fontSize: 12 }}>
               <thead>
                 <tr style={{ background: '#d7d9e7', color: '#1120b3' }}>
@@ -377,7 +477,23 @@ const MPSReportPage = () => {
                               fontWeight: parameter.key === 'balance' ? 700 : 400,
                             }}
                           >
-                            {value}
+                            {isEditingProduction && parameter.key === 'production' ? (
+                              <input
+                                type="text"
+                                value={value}
+                                onChange={(e) => handleProductionChange(row.code, index, e.target.value)}
+                                style={{
+                                  width: 60,
+                                  borderRadius: 4,
+                                  border: '1px solid #ccc',
+                                  padding: '3px 4px',
+                                  fontSize: 11,
+                                  textAlign: 'center',
+                                }}
+                              />
+                            ) : (
+                              value || '0'
+                            )}
                           </td>
                         ))}
                       </tr>

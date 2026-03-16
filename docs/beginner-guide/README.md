@@ -17,18 +17,28 @@ Before going deep into this repo, try to learn these basics:
 
 ## Step 1: Run the Project
 
-Start by running the app locally.
+Start both the frontend and the backend locally so that the pages can fetch real data.
 
-Use:
+1. Install Node dependencies and Python packages:
 
-```bash
-npm install
-npm run dev
-```
+   ```bash
+   npm install            # frontend
+   pip install -r requirements.txt  # backend (django + drf + corsheaders)
+   ```
 
-Then open the local Vite URL in your browser.
+2. Apply Django migrations (creates `db.sqlite3`):
 
-Do not start by reading every file. Start by running the app and clicking through the UI.
+   ```bash
+   python manage.py migrate
+   ```
+
+3. Open two terminals:
+   - run `npm run dev` to start the React/Vite server (http://localhost:5173)
+   - run `npm run backend` (or `python manage.py runserver`) to start Django (http://localhost:8000)
+
+The UI will then populate using data fetched from the API.
+
+Don’t try to read every file at first – click through the running app, see the pages, and refer back to code as you go.
 
 ## Step 2: Understand the Big Picture
 
@@ -122,7 +132,9 @@ Once you are comfortable, start learning:
 - responsive design
 - state organization
 - routing with `react-router-dom`
-- API integration with `fetch`
+- API integration with `fetch` (this project now has a simple Django API; see the separate doc below)
+
+For a walkthrough of the existing API calls, open `docs/api-integration/README.md`.
 
 ## Beginner-Friendly Improvements You Can Try
 
@@ -133,7 +145,7 @@ Here are safe improvement tasks for practice:
 - add validation to register/login inputs
 - add sorting to the master data table
 - add page-level loading or empty states
-- connect report data to a real API later
+- extend or modify the backend API (see `docs/api-integration/README.md` for details)
 
 ## How to Study This Repo Efficiently
 

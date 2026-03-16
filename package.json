@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "backend": "cd backend && ../C:/Users/abhigyan/AppData/Local/Python/pythoncore-3.14-64/python.exe manage.py runserver"
   },
   "dependencies": {
     "react": "^18.3.1",

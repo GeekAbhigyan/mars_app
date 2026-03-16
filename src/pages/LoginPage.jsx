@@ -2,8 +2,10 @@ import { useState } from 'react';
 import colors from '../constants/colors';
 import AuthLayout from '../layouts/AuthLayout';
 
-const LoginPage = ({ onLogin, onGoRegister }) => {
-  const [email] = useState('aakaash.pattanayak@effem.com');
+const LoginPage = ({ onLogin, onGoRegister, error }) => {
+  const [email, setEmail] = useState('aakaash.pattanayak@effem.com');
+  const [password, setPassword] = useState('');
+  const [localError, setLocalError] = useState('');
 
   const cardStyle = {
     background: '#fff',
@@ -11,6 +13,7 @@ const LoginPage = ({ onLogin, onGoRegister }) => {
     padding: '36px 32px',
     boxShadow: '0 4px 30px rgba(0,0,0,0.09)',
     border: '1px solid #f0f0f0',
+    width: 360,
   };
 
   return (
@@ -28,16 +31,72 @@ const LoginPage = ({ onLogin, onGoRegister }) => {
           Login to your account
         </h2>
 
-        <div style={{ marginBottom: 20 }}>
-          <div style={{ fontSize: 13, color: '#777', textAlign: 'center', marginBottom: 4 }}>Username</div>
-          <div style={{ textAlign: 'center', fontWeight: 600, fontSize: 14, color: colors.marsBlueDark }}>
-            {email}
-          </div>
+        <div style={{ marginBottom: 12 }}>
+          <label
+            htmlFor="login-email"
+            style={{ display: 'block', fontSize: 13, color: '#555', marginBottom: 6, fontWeight: 500 }}
+          >
+            Email
+          </label>
+          <input
+            id="login-email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            style={{
+              width: '100%',
+              padding: '10px 12px',
+              border: '1px solid #ddd',
+              borderRadius: 7,
+              fontSize: 13,
+              color: '#333',
+              boxSizing: 'border-box',
+              outline: 'none',
+            }}
+          />
         </div>
+
+        <div style={{ marginBottom: 18 }}>
+          <label
+            htmlFor="login-password"
+            style={{ display: 'block', fontSize: 13, color: '#555', marginBottom: 6, fontWeight: 500 }}
+          >
+            Password
+          </label>
+          <input
+            id="login-password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            style={{
+              width: '100%',
+              padding: '10px 12px',
+              border: '1px solid #ddd',
+              borderRadius: 7,
+              fontSize: 13,
+              color: '#333',
+              boxSizing: 'border-box',
+              outline: 'none',
+            }}
+          />
+        </div>
+
+        {(error || localError) && (
+          <div style={{ color: '#b00020', marginBottom: 12, textAlign: 'center', fontSize: 12 }}>
+            {localError || error}
+          </div>
+        )}
 
         <button
           type="button"
-          onClick={onLogin}
+          onClick={() => {
+            if (!email || !password) {
+              setLocalError('Please enter both email and password.');
+              return;
+            }
+            setLocalError('');
+            onLogin({ email, password });
+          }}
           style={{
             width: '100%',
             padding: '13px',
